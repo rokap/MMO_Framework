@@ -21,7 +21,19 @@ public class ClientSend : MonoBehaviour
     }
 
     #region Packets
-    /// <summary>Lets the server know that the welcome message was received.</summary>
+
+    public static void SendRegistration(string username, string password, string email)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.submitRegistration))
+        {
+            _packet.Write(username);
+            _packet.Write(password);
+            _packet.Write(email);
+
+            SendTCPData(_packet);
+        }
+    }
+
     public static void WelcomeReceived()
     {
         using (Packet _packet = new Packet((int)ClientPackets.welcomeReceived))
@@ -33,8 +45,6 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    /// <summary>Sends player input to the server.</summary>
-    /// <param name="_inputs"></param>
     public static void PlayerMovement(bool[] _inputs)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerMovement))

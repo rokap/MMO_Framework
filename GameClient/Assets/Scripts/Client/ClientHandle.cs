@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
@@ -164,5 +165,15 @@ public class ClientHandle : MonoBehaviour
         float _health = _packet.ReadFloat();
 
         GameManager.enemies[_enemyId].SetHealth(_health);
+    }
+
+    public static void RegistrationAccountExists(Packet _packet)
+    {
+        Register.instance.SetStatus("Account Already Exists");
+    }
+
+    public static void SendToCharacterSelection(Packet _packet)
+    {
+        Register.instance.gameObject.SetActive(false);
     }
 }

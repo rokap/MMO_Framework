@@ -31,6 +31,8 @@ public class Client : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
+
+        ConnectToServer();
     }
 
     private void OnApplicationQuit()
@@ -311,6 +313,8 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.enemyPosition, ClientHandle.EnemyPosition },
             { (int)ServerPackets.enemyHealth, ClientHandle.EnemyHealth },
             { (int)ServerPackets.spawnEntity, ClientHandle.SpawnEntity },
+            { (int)ServerPackets.registrationAccountExists, ClientHandle.RegistrationAccountExists },
+            { (int)ServerPackets.sendToCharacterSelection, ClientHandle.SendToCharacterSelection },
         };
         Debug.Log("Initialized packets.");
     }

@@ -14,7 +14,7 @@ public class ServerHandle
         {
             Debug.Log($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
         }
-        Server.clients[_fromClient].SendIntoGame(_username);
+        //Server.clients[_fromClient].SendIntoGame(_username);
     }
 
     public static void PlayerMovement(int _fromClient, Packet _packet)
@@ -42,6 +42,28 @@ public class ServerHandle
 
         Server.clients[_fromClient].player.ThrowItem(_throwDirection);
     }
+    public static void Registration(int _fromClient, Packet _packet)
+    {
+        string username = _packet.ReadString();
+        string password = _packet.ReadString();
+        string email = _packet.ReadString();
 
-        
+        Debug.Log(username);
+        Debug.Log(password);
+        Debug.Log(email);
+
+        // Check DB for existing user
+        if (DatabaseHandler.instance.CreateAccount(username, password, email))
+        {
+            // Account Created Successfully
+            ServerSend.SendToCharacterSelection(_fromClient);
+        }
+        else
+        {
+            // Account Exists / Inform Client
+            ServerSend.RegistrationAccountExists(_fromClient);
+        }
+    }
+
+
 }

@@ -159,6 +159,8 @@ public class Client
         }
     }
 
+   
+
     public class UDP
     {
         public IPEndPoint endPoint;
@@ -251,6 +253,7 @@ public class Client
             ServerSend.SpawnEntity(id, _entity);
         }
     }
+    
 
     /// <summary>Disconnects the client and stops all network traffic.</summary>
     private void Disconnect()

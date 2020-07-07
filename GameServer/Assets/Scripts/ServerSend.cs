@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -49,6 +50,7 @@ public class ServerSend
         }
     }
 
+
     /// <summary>Sends a packet to all clients via UDP.</summary>
     /// <param name="_packet">The packet to send.</param>
     private static void SendUDPDataToAll(Packet _packet)
@@ -59,6 +61,7 @@ public class ServerSend
             Server.clients[i].udp.SendData(_packet);
         }
     }
+
     /// <summary>Sends a packet to all clients except one via UDP.</summary>
     /// <param name="_exceptClient">The client to NOT send the data to.</param>
     /// <param name="_packet">The packet to send.</param>
@@ -296,7 +299,23 @@ public class ServerSend
             SendTCPData(_toClient, _packet);
         }
     }
-    
+
+
+    public static void RegistrationAccountExists(int _toClient)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.registrationAccountExists))
+        {
+            SendTCPData(_toClient, _packet);
+        }
+    }
+
+    public static void SendToCharacterSelection(int _toClient)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.sendToCharacterSelection))
+        {
+            SendTCPData(_toClient, _packet);
+        }
+    }
 
     #endregion
 }

@@ -24,7 +24,9 @@ public enum ServerPackets
     enemyPosition,
     enemyHealth,
     inspectEntity,
-    spawnEntity
+    spawnEntity,
+    registrationAccountExists,
+    sendToCharacterSelection
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -34,7 +36,8 @@ public enum ClientPackets
     playerMovement,
     playerShoot,
     playerThrowItem,
-    playerInspect
+    playerInspect,
+    submitRegistration
 }
 
 public class Packet : IDisposable
