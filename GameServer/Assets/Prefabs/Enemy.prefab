@@ -54,6 +54,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -65,6 +66,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -130,12 +132,13 @@ MonoBehaviour:
   shootOrigin: {fileID: 4375789778787327676}
   gravity: -19.62
   patrolSpeed: 2
-  chaseSpeed: 8
+  chaseSpeed: 2
   health: 0
   maxHealth: 100
   detectionRange: 30
-  shootRange: 15
+  shootRange: 30
   shootAccuracy: 0.01
+  shootForce: 100
   patrolDuration: 3
   idleDuration: 1
 --- !u!143 &2319307683833354698

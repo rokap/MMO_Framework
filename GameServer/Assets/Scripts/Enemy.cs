@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     public float detectionRange = 30f;
     public float shootRange = 15f;
     public float shootAccuracy = 0.1f;
+    public float shootForce = 600f;
     public float patrolDuration = 3f;
     public float idleDuration = 1f;
 
@@ -187,16 +188,8 @@ public class Enemy : MonoBehaviour
 
     private void Shoot(Vector3 _shootDirection)
     {
-        if (Physics.Raycast(shootOrigin.position, _shootDirection, out RaycastHit _hit, shootRange))
-        {
-            if (_hit.collider.CompareTag("Player"))
-            {
-                if (Random.value <= shootAccuracy)
-                {
-                    _hit.collider.GetComponent<Player>().TakeDamage(50f);
-                }
-            }
-        }
+
+        NetworkManager.instance.InstantiateProjectile(shootOrigin).Initialize(_shootDirection, shootForce, id);
     }
 
     public void TakeDamage(float _damage)

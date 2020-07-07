@@ -64,19 +64,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CameraController.cs" />
-    <Compile Include="Assets\Scripts\Client.cs" />
-    <Compile Include="Assets\Scripts\ClientHandle.cs" />
-    <Compile Include="Assets\Scripts\ClientSend.cs" />
-    <Compile Include="Assets\Scripts\EnemyManager.cs" />
+    <Compile Include="Assets\Scripts\Client\Client.cs" />
+    <Compile Include="Assets\Scripts\Client\ClientHandle.cs" />
+    <Compile Include="Assets\Scripts\Client\ClientSend.cs" />
+    <Compile Include="Assets\Scripts\Client\Packet.cs" />
     <Compile Include="Assets\Scripts\Entity.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\ItemSpawner.cs" />
-    <Compile Include="Assets\Scripts\Packet.cs" />
+    <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\ProjectileManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\ThreadManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\UIManager.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\PlayerManager.cs" />
-    <Compile Include="Assets\Scripts\ProjectileManager.cs" />
-    <Compile Include="Assets\Scripts\ThreadManager.cs" />
-    <Compile Include="Assets\Scripts\UIManager.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.2f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
