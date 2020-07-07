@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
+/// <summary>
+/// Handle Incoming Packets
+/// </summary>
 public class ClientHandle : MonoBehaviour
 {
     public static void Welcome(Packet _packet)
@@ -133,6 +136,15 @@ public class ClientHandle : MonoBehaviour
         Vector3 _position = _packet.ReadVector3();
 
         GameManager.instance.SpawnEnemy(_enemyId, _position);
+    }
+
+    public static void SpawnEntity(Packet _packet)
+    {
+        int _id = _packet.ReadInt();
+        string _name = _packet.ReadString();
+        Vector3 _position = _packet.ReadVector3();
+
+        GameManager.instance.SpawnEntity(_id, _name, _position);
     }
 
     public static void EnemyPosition(Packet _packet)

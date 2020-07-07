@@ -10,6 +10,7 @@ public class ServerSend
     private static void SendTCPData(int _toClient, Packet _packet)
     {
         _packet.WriteLength();
+        Debug.Log("Sending [" + _packet.packetType + "] to Client[" + _toClient + "]");
         Server.clients[_toClient].tcp.SendData(_packet);
     }
 
@@ -29,7 +30,8 @@ public class ServerSend
         _packet.WriteLength();
         for (int i = 1; i <= Server.MaxPlayers; i++)
         {
-            Server.clients[i].tcp.SendData(_packet);
+            if (Server.clients[i].tcp.socket != null)
+                Server.clients[i].tcp.SendData(_packet);
         }
     }
     /// <summary>Sends a packet to all clients except one via TCP.</summary>
@@ -197,7 +199,7 @@ public class ServerSend
     {
         using (Packet _packet = new Packet((int)ServerPackets.spawnProjectile))
         {
-            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.myNetworkId);
             _packet.Write(_projectile.transform.position);
             _packet.Write(_thrownByPlayer);
 
@@ -209,7 +211,7 @@ public class ServerSend
     {
         using (Packet _packet = new Packet((int)ServerPackets.projectilePosition))
         {
-            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.myNetworkId);
             _packet.Write(_projectile.transform.position);
 
             SendUDPDataToAll(_packet);
@@ -220,7 +222,7 @@ public class ServerSend
     {
         using (Packet _packet = new Packet((int)ServerPackets.projectileExploded))
         {
-            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.myNetworkId);
             _packet.Write(_projectile.transform.position);
 
             SendTCPDataToAll(_packet);
@@ -270,5 +272,31 @@ public class ServerSend
             SendTCPDataToAll(_packet);
         }
     }
+    public static void SpawnEntity(Entity _entity)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnEntity))
+        {
+
+            _packet.Write(_entity.id);
+            _packet.Write(_entity.name);
+            _packet.Write(_entity.transform.position);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+    public static void SpawnEntity(int _toClient, Entity _entity)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnEntity))
+        {
+
+            _packet.Write(_entity.id);
+            _packet.Write(_entity.name);
+            _packet.Write(_entity.transform.position);
+
+            SendTCPData(_toClient, _packet);
+        }
+    }
+    
+
     #endregion
 }

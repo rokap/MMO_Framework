@@ -245,6 +245,11 @@ public class Client
         {
             ServerSend.SpawnEnemy(id, _enemy);
         }
+
+        foreach (Entity _entity in GameObject.FindObjectsOfType<Entity>())
+        {
+            ServerSend.SpawnEntity(id, _entity);
+        }
     }
 
     /// <summary>Disconnects the client and stops all network traffic.</summary>

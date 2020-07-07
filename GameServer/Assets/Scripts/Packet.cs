@@ -22,7 +22,9 @@ public enum ServerPackets
     projectileExploded,
     spawnEnemy,
     enemyPosition,
-    enemyHealth
+    enemyHealth,
+    inspectEntity,
+    spawnEntity
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -31,14 +33,16 @@ public enum ClientPackets
     welcomeReceived = 1,
     playerMovement,
     playerShoot,
-    playerThrowItem
+    playerThrowItem,
+    playerInspect
 }
 
 public class Packet : IDisposable
 {
+    public ServerPackets packetType;
     private List<byte> buffer;
     private byte[] readableBuffer;
-    private int readPos;
+    private int readPos;    
 
     /// <summary>Creates a new empty packet (without an ID).</summary>
     public Packet()
@@ -53,7 +57,7 @@ public class Packet : IDisposable
     {
         buffer = new List<byte>(); // Initialize buffer
         readPos = 0; // Set readPos to 0
-
+        packetType = (ServerPackets)_id;
         Write(_id); // Write packet id to the buffer
     }
 

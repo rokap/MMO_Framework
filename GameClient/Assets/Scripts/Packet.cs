@@ -22,7 +22,9 @@ public enum ServerPackets
     projectileExploded,
     spawnEnemy,
     enemyPosition,
-    enemyHealth
+    enemyHealth,
+    inspectEntity,
+    spawnEntity
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -31,7 +33,8 @@ public enum ClientPackets
     welcomeReceived = 1,
     playerMovement,
     playerShoot,
-    playerThrowItem
+    playerThrowItem,
+    playerInspect
 }
 
 public class Packet : IDisposable

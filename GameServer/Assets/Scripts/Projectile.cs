@@ -5,9 +5,9 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
-    private static int nextProjectileId = 1;
+    private static int nextNetworkId = 1;
 
-    public int id;
+    public int myNetworkId;
     public Rigidbody rigidBody;
     public int thrownByPlayer;
     public Vector3 initialForce;
@@ -16,14 +16,20 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
-        id = nextProjectileId;
-        nextProjectileId++;
-        projectiles.Add(id, this);
+        GenerateNetworkID();
 
         ServerSend.SpawnProjectile(this, thrownByPlayer);
 
         rigidBody.AddForce(initialForce);
         StartCoroutine(ExplodeAfterTime());
+
+       
+    }    
+
+    void GenerateNetworkID()
+    {
+        myNetworkId = nextNetworkId++;
+        projectiles.Add(myNetworkId, this);
     }
 
     private void FixedUpdate()
@@ -59,7 +65,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        projectiles.Remove(id);
+        projectiles.Remove(myNetworkId);
         Destroy(gameObject);
     }
 

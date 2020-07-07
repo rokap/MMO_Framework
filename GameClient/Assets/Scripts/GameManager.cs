@@ -71,4 +71,11 @@ public class GameManager : MonoBehaviour
         _enemy.GetComponent<EnemyManager>().Initialize(_id);
         enemies.Add(_id, _enemy.GetComponent<EnemyManager>());
     }
+
+    public void SpawnEntity(int _id, string _name, Vector3 _position)
+    {
+
+        Entity _entity = Instantiate(Resources.Load<Entity>("Entities/" + _id), _position, Quaternion.identity);        
+        _entity.Initialize(_id, _name);
+    }
 }

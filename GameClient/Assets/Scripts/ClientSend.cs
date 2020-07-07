@@ -6,7 +6,7 @@ public class ClientSend : MonoBehaviour
 {
     /// <summary>Sends a packet to the server via TCP.</summary>
     /// <param name="_packet">The packet to send to the sever.</param>
-    private static void SendTCPData(Packet _packet)
+    protected static void SendTCPData(Packet _packet)
     {
         _packet.WriteLength();
         Client.instance.tcp.SendData(_packet);
@@ -14,7 +14,7 @@ public class ClientSend : MonoBehaviour
 
     /// <summary>Sends a packet to the server via UDP.</summary>
     /// <param name="_packet">The packet to send to the sever.</param>
-    private static void SendUDPData(Packet _packet)
+    protected static void SendUDPData(Packet _packet)
     {
         _packet.WriteLength();
         Client.instance.udp.SendData(_packet);
@@ -65,6 +65,16 @@ public class ClientSend : MonoBehaviour
         using (Packet _packet = new Packet((int)ClientPackets.playerThrowItem))
         {
             _packet.Write(_facing);
+
+            SendTCPData(_packet);
+        }
+    }
+
+    public static void PlayerInspect(Entity entity)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerInspect))
+        {
+            _packet.Write(entity);
 
             SendTCPData(_packet);
         }
