@@ -40,7 +40,7 @@ public partial class Client
         PlayerShoot,
         PlayerThrowItem,
         PlayerInspect,
-        SubmitRegistration
+        Registration
     }
 }
 
