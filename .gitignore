@@ -3,7 +3,7 @@
 *.com
 *.class
 *.dll
-!Assets/Plugins/*.dll
+!Plugins/*.dll
 *.exe
 *.o
 *.so
