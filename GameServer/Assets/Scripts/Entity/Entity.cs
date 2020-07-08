@@ -7,6 +7,6 @@ public class Entity : MonoBehaviour
 
     private void Start()
     {
-        ServerSend.SpawnEntity(this);
+        Server.Send.SpawnEntity(this);
     }
 }
