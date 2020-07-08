@@ -53,7 +53,7 @@ public class ServerHandle
         Debug.Log(email);
 
         // Check DB for existing user
-        if (DatabaseHandler.instance.CreateAccount(username, password, email))
+        if (Server.database.CreateAccount(username, password, email))
         {
             // Account Created Successfully
             ServerSend.SendToCharacterSelection(_fromClient);
