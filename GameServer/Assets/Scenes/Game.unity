@@ -303,7 +303,8 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 2.2337e-41, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 2.1175824e-22, y: 3.0092666e-36, z: 1.009742e-28,
+    w: 2.3509887e-38}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -1524,7 +1525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   host: 127.0.0.1
   database: mmo_server
-  user: root
+  user: mmoServer
   password: hobbes03
   pooling: 1
 --- !u!114 &1675637338
