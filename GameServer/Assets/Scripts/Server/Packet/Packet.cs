@@ -4,48 +4,57 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-/// <summary>Sent from server to client.</summary>
-public enum ServerPackets
+public partial class Server
 {
-    welcome = 1,
-    spawnPlayer,
-    playerPosition,
-    playerRotation,
-    playerDisconnected,
-    playerHealth,
-    playerRespawned,
-    createItemSpawner,
-    itemSpawned,
-    itemPickedUp,
-    spawnProjectile,
-    projectilePosition,
-    projectileExploded,
-    spawnEnemy,
-    enemyPosition,
-    enemyHealth,
-    inspectEntity,
-    spawnEntity,
-    registrationAccountExists,
-    sendToCharacterSelection
+    public enum Packets
+    {
+        Welcome = 1,
+        SpawnPlayer,
+        PlayerPosition,
+        PlayerRotation,
+        PlayerDisconnected,
+        PlayerHealth,
+        PlayerRespawned,
+        CreateItemSpawner,
+        ItemSpawned,
+        ItemPickedUp,
+        SpawnProjectile,
+        ProjectilePosition,
+        ProjectileExploded,
+        SpawnEnemy,
+        EnemyPosition,
+        EnemyHealth,
+        InspectEntity,
+        SpawnEntity,
+        RegistrationAccountExists,
+        SendToCharacterSelection
+    }
 }
 
-/// <summary>Sent from client to server.</summary>
-public enum ClientPackets
+public partial class Client
 {
-    welcomeReceived = 1,
-    playerMovement,
-    playerShoot,
-    playerThrowItem,
-    playerInspect,
-    submitRegistration
+    public enum Packets
+    {
+        Welcome = 1,
+        PlayerMovement,
+        PlayerShoot,
+        PlayerThrowItem,
+        PlayerInspect,
+        SubmitRegistration
+    }
 }
+
+
+
 
 public class Packet : IDisposable
 {
-    public ServerPackets packetType;
+    public Server.Packets packetType;
     private List<byte> buffer;
     private byte[] readableBuffer;
-    private int readPos;    
+    private int readPos;
+
+    public delegate void Receiver(int _fromClient, Packet _packet);
 
     /// <summary>Creates a new empty packet (without an ID).</summary>
     public Packet()
@@ -60,7 +69,7 @@ public class Packet : IDisposable
     {
         buffer = new List<byte>(); // Initialize buffer
         readPos = 0; // Set readPos to 0
-        packetType = (ServerPackets)_id;
+        packetType = (Server.Packets)_id;
         Write(_id); // Write packet id to the buffer
     }
 

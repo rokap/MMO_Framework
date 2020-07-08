@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
-[System.Serializable]
-public class Server
+
+
+ public partial class Server
 {
     public static int MaxPlayers { get; private set; }
     public static int Port { get; private set; }
     public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
-    public delegate void PacketHandler(int _fromClient, Packet _packet);
-    public static Dictionary<int, PacketHandler> packetHandlers;
+    public static Dictionary<int, Packet.Receiver> packetReceivers;
 
     public static Database database = new Database("127.0.0.1","mmo_server","mmoServer","hobbes03",true);
+  
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
 
@@ -22,13 +23,12 @@ public class Server
     /// <param name="_port">The port to start the server on.</param>
     public static void Start(int _maxPlayers, int _port)
     {
-
-
         MaxPlayers = _maxPlayers;
         Port = _port;
 
         // Connect to Database
         database.Connect();
+
 
         // Setup Server Packets
         InitializeServerData();
@@ -132,19 +132,19 @@ public class Server
         }
         Debug.Log("Initializing packets....");
 
-        packetHandlers = new Dictionary<int, PacketHandler>();
-        InitPacketHandlers(ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived);
-        InitPacketHandlers(ClientPackets.playerMovement, ServerHandle.PlayerMovement);
-        InitPacketHandlers(ClientPackets.playerShoot, ServerHandle.PlayerShoot);
-        InitPacketHandlers(ClientPackets.playerThrowItem, ServerHandle.PlayerThrowItem);
-        InitPacketHandlers(ClientPackets.submitRegistration, ServerHandle.Registration);
+        packetReceivers = new Dictionary<int, Packet.Receiver>();
+        InitPacketHandlers(Client.Packets.Welcome, Receive.Welcome);
+        InitPacketHandlers(Client.Packets.PlayerMovement, Receive.PlayerMovement);
+        InitPacketHandlers(Client.Packets.PlayerShoot, Receive.PlayerShoot);
+        InitPacketHandlers(Client.Packets.PlayerThrowItem, Receive.PlayerThrowItem);
+        InitPacketHandlers(Client.Packets.SubmitRegistration, Receive.Registration);
 
     }
 
-    private static void InitPacketHandlers(ClientPackets _clientPacket, Server.PacketHandler _serverPacketHandler)
+    private static void InitPacketHandlers(Client.Packets _clientPacket, Packet.Receiver _serverPacketHandler)
     {
         Debug.Log(" - " + _clientPacket + " => " + _serverPacketHandler.Method.ToString());
-        packetHandlers.Add((int)_clientPacket, _serverPacketHandler);
+        packetReceivers.Add((int)_clientPacket, _serverPacketHandler);
     }
 
     public static void Stop()

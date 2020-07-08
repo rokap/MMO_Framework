@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour
     {
         GenerateNetworkID();
 
-        ServerSend.SpawnProjectile(this, thrownByPlayer);
+        Server.Send.SpawnProjectile(this, thrownByPlayer);
 
         rigidBody.AddForce(initialForce);
         StartCoroutine(ExplodeAfterTime());
@@ -34,7 +34,7 @@ public class Projectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ServerSend.ProjectilePosition(this);
+        Server.Send.ProjectilePosition(this);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -50,7 +50,7 @@ public class Projectile : MonoBehaviour
 
     private void Explode()
     {
-        ServerSend.ProjectileExploded(this);
+        Server.Send.ProjectileExploded(this);
 
         Collider[] _colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider _collider in _colliders)

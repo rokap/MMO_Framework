@@ -5,8 +5,9 @@ using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 
-public class Client
+public partial class Client
 {
+    
     public static int dataBufferSize = 4096;
 
     public int id;
@@ -49,8 +50,8 @@ public class Client
             receiveBuffer = new byte[dataBufferSize];
 
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-
-            ServerSend.Welcome(id, "Welcome to the server!");
+            
+            Server.Send.Welcome(id, "Welcome to the server!");
         }
 
         /// <summary>Sends data to the client via TCP.</summary>
@@ -123,7 +124,7 @@ public class Client
                     using (Packet _packet = new Packet(_packetBytes))
                     {
                         int _packetId = _packet.ReadInt();
-                        Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                        Server.packetReceivers[_packetId](id, _packet); // Call appropriate method to handle the packet
                     }
                 });
 
@@ -198,7 +199,7 @@ public class Client
                 using (Packet _packet = new Packet(_packetBytes))
                 {
                     int _packetId = _packet.ReadInt();
-                    Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                    Server.packetReceivers[_packetId](id, _packet); // Call appropriate method to handle the packet
                 }
             });
         }
@@ -224,7 +225,7 @@ public class Client
             {
                 if (_client.id != id)
                 {
-                    ServerSend.SpawnPlayer(id, _client.player);
+                    Server.Send.SpawnPlayer(id, _client.player);
                 }
             }
         }
@@ -234,23 +235,23 @@ public class Client
         {
             if (_client.player != null)
             {
-                ServerSend.SpawnPlayer(_client.id, player);
+                Server.Send.SpawnPlayer(_client.id, player);
             }
         }
 
         foreach (ItemSpawner _itemSpawner in ItemSpawner.spawners.Values)
         {
-            ServerSend.CreateItemSpawner(id, _itemSpawner.spawnerId, _itemSpawner.transform.position, _itemSpawner.hasItem);
+            Server.Send.CreateItemSpawner(id, _itemSpawner.spawnerId, _itemSpawner.transform.position, _itemSpawner.hasItem);
         }
 
         foreach (Enemy _enemy in Enemy.enemies.Values)
         {
-            ServerSend.SpawnEnemy(id, _enemy);
+            Server.Send.SpawnEnemy(id, _enemy);
         }
 
         foreach (Entity _entity in GameObject.FindObjectsOfType<Entity>())
         {
-            ServerSend.SpawnEntity(id, _entity);
+            Server.Send.SpawnEntity(id, _entity);
         }
     }
     
@@ -269,6 +270,6 @@ public class Client
         tcp.Disconnect();
         udp.Disconnect();
 
-        ServerSend.PlayerDisconnected(id);
+        Server.Send.PlayerDisconnected(id);
     }
 }
