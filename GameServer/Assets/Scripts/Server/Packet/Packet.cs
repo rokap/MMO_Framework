@@ -44,9 +44,6 @@ public partial class Client
     }
 }
 
-
-
-
 public class Packet : IDisposable
 {
     public Server.Packets packetType;
