@@ -133,11 +133,16 @@ using UnityEngine;
         Debug.Log("Initializing packets....");
 
         packetReceivers = new Dictionary<int, Packet.Receiver>();
+
+        foreach (Client.Packets type in Enum.GetValues(typeof(Client.Packets)))
+        {
+
+        }
         InitPacketHandlers(Client.Packets.Welcome, Receive.Welcome);
         InitPacketHandlers(Client.Packets.PlayerMovement, Receive.PlayerMovement);
         InitPacketHandlers(Client.Packets.PlayerShoot, Receive.PlayerShoot);
         InitPacketHandlers(Client.Packets.PlayerThrowItem, Receive.PlayerThrowItem);
-        InitPacketHandlers(Client.Packets.SubmitRegistration, Receive.Registration);
+        InitPacketHandlers(Client.Packets.Registration, Receive.Registration);
 
     }
 
