@@ -126,24 +126,30 @@ using UnityEngine;
     /// <summary>Initializes all necessary server data.</summary>
     private static void InitializeServerData()
     {
+        // Setup Max Clients
         for (int i = 1; i <= MaxPlayers; i++)
         {
             clients.Add(i, new Client(i));
         }
-        Debug.Log("Initializing Packet Receivers....");
 
-        packetReceivers = new Dictionary<int, Packet.Receiver>();
-        InitPacketHandlers(Client.Packets.Welcome, Receive.Welcome);
-        InitPacketHandlers(Client.Packets.PlayerMovement, Receive.PlayerMovement);
-        InitPacketHandlers(Client.Packets.PlayerShoot, Receive.PlayerShoot);
-        InitPacketHandlers(Client.Packets.PlayerThrowItem, Receive.PlayerThrowItem);
-        InitPacketHandlers(Client.Packets.PlayerInspect, Receive.PlayerThrowItem);
-        InitPacketHandlers(Client.Packets.Registration, Receive.Registration);
+        // Init Packet Receivers.
+        InitPacketReceiver(Client.Packets.Welcome, Receive.Welcome);
+        InitPacketReceiver(Client.Packets.PlayerMovement, Receive.PlayerMovement);
+        InitPacketReceiver(Client.Packets.PlayerShoot, Receive.PlayerShoot);
+        InitPacketReceiver(Client.Packets.PlayerThrowItem, Receive.PlayerThrowItem);
+        InitPacketReceiver(Client.Packets.PlayerInspect, Receive.PlayerThrowItem);
+        InitPacketReceiver(Client.Packets.Registration, Receive.Registration);
 
     }
 
-    private static void InitPacketHandlers(Client.Packets _clientPacket, Packet.Receiver _serverPacketHandler)
+    private static void InitPacketReceiver(Client.Packets _clientPacket, Packet.Receiver _serverPacketHandler)
     {
+        if(packetReceivers == null)
+        {
+            Debug.Log("Initializing Packet Receivers....");
+            packetReceivers = new Dictionary<int, Packet.Receiver>();
+        }   
+        
         Debug.Log(" - ( " + (int)_clientPacket + " ) " + _clientPacket + " Receiver Initialized... ");
         packetReceivers.Add((int)_clientPacket, _serverPacketHandler);
     }
