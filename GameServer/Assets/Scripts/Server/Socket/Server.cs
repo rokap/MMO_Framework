@@ -130,25 +130,21 @@ using UnityEngine;
         {
             clients.Add(i, new Client(i));
         }
-        Debug.Log("Initializing packets....");
+        Debug.Log("Initializing Packet Receivers....");
 
         packetReceivers = new Dictionary<int, Packet.Receiver>();
-
-        foreach (Client.Packets type in Enum.GetValues(typeof(Client.Packets)))
-        {
-
-        }
         InitPacketHandlers(Client.Packets.Welcome, Receive.Welcome);
         InitPacketHandlers(Client.Packets.PlayerMovement, Receive.PlayerMovement);
         InitPacketHandlers(Client.Packets.PlayerShoot, Receive.PlayerShoot);
         InitPacketHandlers(Client.Packets.PlayerThrowItem, Receive.PlayerThrowItem);
+        InitPacketHandlers(Client.Packets.PlayerInspect, Receive.PlayerThrowItem);
         InitPacketHandlers(Client.Packets.Registration, Receive.Registration);
 
     }
 
     private static void InitPacketHandlers(Client.Packets _clientPacket, Packet.Receiver _serverPacketHandler)
     {
-        Debug.Log(" - " + _clientPacket + " => " + _serverPacketHandler.Method.ToString());
+        Debug.Log(" - ( " + (int)_clientPacket + " ) " + _clientPacket + " Receiver Initialized... ");
         packetReceivers.Add((int)_clientPacket, _serverPacketHandler);
     }
 
