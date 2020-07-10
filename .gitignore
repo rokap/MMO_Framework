@@ -3,8 +3,8 @@
 *.com
 *.class
 *.dll
-!GameServer/Assets/Plugins/*.dll
-!GameClient/Assets/Plugins/*.dll
+!GameServer/Assets/Plugins/**/*.dll
+!GameClient/Assets/Plugins/**/*.dll
 *.exe
 *.o
 *.so
