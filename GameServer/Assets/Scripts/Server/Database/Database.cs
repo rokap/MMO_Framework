@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
+
 [Serializable]
 public class Database
 {
@@ -22,6 +23,8 @@ public class Database
 
     public Database(string host, string database, string user, string password, bool pooling)
     {
+        // The following requires: using Castle.ActiveRecord.Framework.Config;
+
         this.host = host;
         this.database = database;
         this.user = user;

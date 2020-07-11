@@ -23,6 +23,11 @@ using UnityEngine;
     /// <param name="_port">The port to start the server on.</param>
     public static void Start(int _maxPlayers, int _port)
     {
+        Account account = new Account();
+        account.Username = "Bob";
+        account.Password = "123";
+        account.Email = "dave@rokap.com";
+        account.Save();
         MaxPlayers = _maxPlayers;
         Port = _port;
 

@@ -58,6 +58,7 @@ public class Packet : IDisposable
     {
         buffer = new List<byte>(); // Initialize buffer
         readPos = 0; // Set readPos to 0
+
     }
 
     /// <summary>Creates a new packet with a given ID. Used for sending.</summary>
