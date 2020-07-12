@@ -32,10 +32,49 @@ public class Database
         this.pooling = pooling;
     }
 
+    internal DataRowCollection Query(string sql)
+    {
+        MySqlCommand cmd = null;
+
+        if (sql.Contains("INSERT") || sql.Contains("UPDATE"))
+        {
+            Debug.Log(sql);
+            cmd = new MySqlCommand(sql, con);
+
+            int id = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.Dispose();
+            DataTable data = new DataTable();
+            data.Columns.Add("id"); ;
+            DataRow row = data.NewRow();
+            row["id"] = id;
+            data.Rows.Add(row);
+
+            return data.Rows;
+        }
+        else if (sql.Contains("SELECT"))
+        {
+            Debug.Log(sql);
+            DataTable data = new DataTable();
+            cmd = new MySqlCommand(sql, con);
+            data.Load(cmd.ExecuteReader());
+            cmd.Dispose();
+            return data.Rows;
+
+
+        }
+        else if (sql.Contains("DELETE"))
+        {
+            Debug.Log(sql);
+            cmd = new MySqlCommand(sql, con);
+            cmd.ExecuteNonQuery();
+        }
+        return null;
+    }
+
     public void Connect()
     {
         connectionString = "Server=" + host + ";Database=" + database + ";User=" + user + ";Password=" + password + ";Pooling=";
-        
+
         if (pooling)
         {
             connectionString += "True";
@@ -48,7 +87,7 @@ public class Database
         {
             con = new MySqlConnection(connectionString);
             con.Open();
-            Debug.Log("Connecting to Mysql" + ((con.State == ConnectionState.Open)?"....Connected":"....Error"));
+            // Debug.Log("Connecting to Mysql" + ((con.State == ConnectionState.Open)?"....Connected":"....Error"));
 
 
         }
@@ -93,5 +132,5 @@ public class Database
         return false;
 
     }
-    
+
 }
