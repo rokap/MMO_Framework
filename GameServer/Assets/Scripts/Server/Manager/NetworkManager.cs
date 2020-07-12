@@ -38,6 +38,7 @@ public class NetworkManager : MonoBehaviour
 
             // Update Record
             Item item = new Item("Test");
+            Debug.Log(item.id);
         }
     }
 
