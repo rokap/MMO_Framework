@@ -28,7 +28,17 @@ public class NetworkManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 30;
 
-        Server.Start(250, 26950);
+        Server.Start(3, 26950);
+    }
+
+    private void OnGUI()
+    {
+        if (GUILayout.Button("Test"))
+        {
+
+            // Update Record
+            Item item = new Item("Test");
+        }
     }
 
     private void OnApplicationQuit()
