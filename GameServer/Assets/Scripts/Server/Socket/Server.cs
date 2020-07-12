@@ -6,15 +6,15 @@ using System.Net.Sockets;
 using UnityEngine;
 
 
- public partial class Server
+public partial class Server
 {
     public static int MaxPlayers { get; private set; }
     public static int Port { get; private set; }
     public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
     public static Dictionary<int, Packet.Receiver> packetReceivers;
 
-    public static Database database = new Database("127.0.0.1","mmo_server","mmoServer","hobbes03",true);
-  
+    public static Database database = new Database("127.0.0.1", "mmo_server", "mmoServer", "hobbes03", true);
+
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
 
@@ -23,17 +23,13 @@ using UnityEngine;
     /// <param name="_port">The port to start the server on.</param>
     public static void Start(int _maxPlayers, int _port)
     {
-        Account account = new Account();
-        account.Username = "Bob";
-        account.Password = "123";
-        account.Email = "dave@rokap.com";
-        account.Save();
+
+
         MaxPlayers = _maxPlayers;
         Port = _port;
 
         // Connect to Database
         database.Connect();
-
 
         // Setup Server Packets
         InitializeServerData();
@@ -47,6 +43,8 @@ using UnityEngine;
 
         Debug.Log($"Server started on port {Port}.");
     }
+
+
 
     /// <summary>Handles new TCP connections.</summary>
     private static void TCPConnectCallback(IAsyncResult _result)
@@ -149,13 +147,13 @@ using UnityEngine;
 
     private static void InitPacketReceiver(Client.Packets _clientPacket, Packet.Receiver _serverPacketHandler)
     {
-        if(packetReceivers == null)
+        if (packetReceivers == null)
         {
-            Debug.Log("Initializing Packet Receivers....");
+            //Debug.Log("Initializing Packet Receivers....");
             packetReceivers = new Dictionary<int, Packet.Receiver>();
-        }   
-        
-        Debug.Log(" - ( " + (int)_clientPacket + " ) " + _clientPacket + " Receiver Initialized... ");
+        }
+
+        //Debug.Log(" - ( " + (int)_clientPacket + " ) " + _clientPacket + " Receiver Initialized... ");
         packetReceivers.Add((int)_clientPacket, _serverPacketHandler);
     }
 
