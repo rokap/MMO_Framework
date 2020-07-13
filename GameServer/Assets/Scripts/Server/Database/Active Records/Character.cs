@@ -4,22 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
-[Table("characters")]
-public class Character : ActiveRecord
+public partial class Database
 {
-    public int id;
-    public uint account_id;
-    public string name;
-    public int level;
-
-    public Character() : base() { }
-
-    public Character(uint account_id, string name, int level)
+    [Table("characters")]
+    public class Character : ActiveRecord
     {
-        this.account_id = account_id;
-        this.name = name;
-        this.level = level;
-        this.id = this.Create();
+        public int id;
+        public uint account_id;
+        public string name;
+        public int level;
+
+        public Character() : base() { }
+
+        public Character(uint account_id, string name, int level)
+        {
+            this.account_id = account_id;
+            this.name = name;
+            this.level = level;
+            this.id = this.Create();
+        }
     }
 }

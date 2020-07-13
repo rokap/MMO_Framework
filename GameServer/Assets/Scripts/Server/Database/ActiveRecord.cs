@@ -32,7 +32,8 @@ public class ActiveRecord
 
     }
 
-    public int Create()
+    // Create
+    protected int Create()
     {
 
         FieldInfo[] properties = GetType().GetFields();
@@ -47,6 +48,7 @@ public class ActiveRecord
 
     }
 
+    // Update 
     public void Update()
     {
         FieldInfo field = GetType().GetField("id");
@@ -129,6 +131,49 @@ public class ActiveRecord
 
     }
 
+    // Load By Field
+    public static T Load<T>(params (string Key, object Value)[] pairs) where T : new()
+    {
+        Type t = typeof(T);
+        string table = t.GetCustomAttribute<Table>().name;
+        string where = "WHERE ";
+        foreach (var pair in pairs)
+        {
+            var (field, value) = pair;
+            where += field + " = '" + value + "' && ";
+        }
+        where = where.TrimEnd('&', ' ');
+        string sql = "SELECT * FROM " + table +" "+ where;
+
+        DataRowCollection rows = Server.database.Query(sql);
+        FieldInfo[] properties = t.GetFields();
+
+        T newT = new T();
+        foreach (DataRow row in rows)
+        {
+            for (int i = 0; i < properties.Length; i++)
+            {
+                FieldInfo property = newT.GetType().GetField(properties[i].Name);
+                if (properties[i].FieldType == typeof(int))
+                {
+                    property.SetValue(newT, Convert.ToInt32(row[properties[i].Name]));
+                }
+                else if (properties[i].FieldType == typeof(uint))
+                {
+                    property.SetValue(newT, Convert.ToUInt32(row[properties[i].Name]));
+                }
+                else
+                {
+                    property.SetValue(newT, row[properties[i].Name]);
+                }
+
+            }
+            break;
+        }
+        return newT;
+
+    }
+
     private string GetUpdateFieldValue()
     {
         string fields = null;
@@ -168,6 +213,7 @@ public class ActiveRecord
         Server.database.Query(sql);
         return true;
     }
+
     public static bool Delete<T>(int id)
     {
         Type t = typeof(T);

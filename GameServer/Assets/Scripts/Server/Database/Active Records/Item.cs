@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
-[Table("items")]
-public class Item : ActiveRecord
+public partial class Database
 {
-    public int id;
-    public string name;
-
-    public Item() : base() { }
-
-    public Item(string name)
+    [Table("items")]
+    public class Item : ActiveRecord
     {
-        this.name = name;
-        this.id = this.Create();
+        public int id;
+        public string name;
+
+        public Item() : base() { }
+
+        public Item(string name)
+        {
+            this.name = name;
+            this.id = this.Create();
+        }
     }
 }
