@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
@@ -13,35 +14,53 @@ public partial class Server
     public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
     public static Dictionary<int, Packet.Receiver> packetReceivers;
 
-    public static Database database = new Database("127.0.0.1", "mmo_server", "mmoServer", "hobbes03", true);
+    public static Database database = null;
 
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
+
+    public static bool TcpReady
+    {
+        get { return (tcpListener != null) ? true : false; }
+    }
+
+    public static bool UdpReady
+    {
+        get { return (udpListener != null) ? true : false; }
+    }
+
+    public static bool PacketsReady
+    {
+        get { return (packetReceivers != null) ? true : false; }
+    }
+
+    public static bool ClientsReady
+    {
+        get { return (clients.Count > 0) ? true : false; }
+    }
+
+    public static bool DatabaseReady
+    {
+        get { return (database != null) ? true : false; }
+    }
+
+    public static bool IsReady { get; private set; }
 
     /// <summary>Starts the server.</summary>
     /// <param name="_maxPlayers">The maximum players that can be connected simultaneously.</param>
     /// <param name="_port">The port to start the server on.</param>
     public static void Start(int _maxPlayers, int _port)
     {
-
+        database = new Database("127.0.0.1", "mmo_server", "mmoServer", "hobbes03", true);
+        Development.Log("Starting Server");
 
         MaxPlayers = _maxPlayers;
         Port = _port;
 
-        // Connect to Database
-        database.Connect();
-
         // Setup Server Packets
         InitializeServerData();
 
-        tcpListener = new TcpListener(IPAddress.Any, Port);
-        tcpListener.Start();
-        tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
-
-        udpListener = new UdpClient(Port);
-        udpListener.BeginReceive(UDPReceiveCallback, null);
-
-        Debug.Log($"Server started on port {Port}.");
+        Development.Divider();
     }
 
 
@@ -68,8 +87,13 @@ public partial class Server
     /// <summary>Receives incoming UDP data.</summary>
     private static void UDPReceiveCallback(IAsyncResult _result)
     {
+        // If we lost our connection
+        if (_result.AsyncState == null)
+            return;
+
         try
         {
+
             IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
             byte[] _data = udpListener.EndReceive(_result, ref _clientEndPoint);
             udpListener.BeginReceive(UDPReceiveCallback, null);
@@ -104,7 +128,7 @@ public partial class Server
         }
         catch (Exception _ex)
         {
-            Debug.Log($"Error receiving UDP data: {_ex}");
+            Debug.LogError($"Error receiving UDP data: {_ex}");
         }
     }
 
@@ -129,19 +153,44 @@ public partial class Server
     /// <summary>Initializes all necessary server data.</summary>
     private static void InitializeServerData()
     {
+
+        // Connect to MySQL
+        Development.Log("Connecting to MySQL");
+        if (!database.Connect())
+        {
+            Debug.LogError("No Database Connection... Shutting Down");
+            return;
+        }
+
         // Setup Max Clients
+        Development.Log("Initializing Client Connections");
         for (int i = 1; i <= MaxPlayers; i++)
         {
             clients.Add(i, new Client(i));
         }
 
         // Init Packet Receivers.
+        Development.Log("Initializing Packet Receivers");
         InitPacketReceiver(Client.Packets.Welcome, Receive.Welcome);
         InitPacketReceiver(Client.Packets.PlayerMovement, Receive.PlayerMovement);
         InitPacketReceiver(Client.Packets.PlayerShoot, Receive.PlayerShoot);
         InitPacketReceiver(Client.Packets.PlayerThrowItem, Receive.PlayerThrowItem);
         InitPacketReceiver(Client.Packets.PlayerInspect, Receive.PlayerThrowItem);
         InitPacketReceiver(Client.Packets.Registration, Receive.Registration);
+
+        // Startup TCP Listener
+        Development.Log("Starting TCP Listener");
+        tcpListener = new TcpListener(IPAddress.Any, Port);
+        tcpListener.Start();
+        tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
+
+        // Startup UDP Listener
+        Development.Log("Starting UDP Listener");
+        udpListener = new UdpClient(Port);
+        udpListener.BeginReceive(UDPReceiveCallback, null);
+
+        Development.Log($"Server Started ( {Port} )");
+        IsReady = true;
 
     }
 
@@ -155,12 +204,51 @@ public partial class Server
 
         //Debug.Log(" - ( " + (int)_clientPacket + " ) " + _clientPacket + " Receiver Initialized... ");
         packetReceivers.Add((int)_clientPacket, _serverPacketHandler);
+        
     }
 
     public static void Stop()
     {
-        database.Disconnect();
-        tcpListener.Stop();
-        udpListener.Close();
+        Development.Log("Stopping Server");
+
+        if (TcpReady)
+        {
+            Development.Log("Shutting Down TCP Listener");
+            tcpListener.Stop();
+            tcpListener = null;
+        }
+
+        if (UdpReady)
+        {
+            Development.Log("Shutting Down UDP Listener");
+            udpListener.Close();
+            udpListener = null;
+        }
+
+
+        if (PacketsReady)
+        {
+            Development.Log("Clearing Packet Receivers");
+            packetReceivers.Clear();
+            packetReceivers = null;
+        }
+
+        if (ClientsReady)
+        {
+            // Setup Max Clients
+            Development.Log("Clearing Client Connections");
+            clients.Clear();
+        }
+
+        if (DatabaseReady)
+        {
+            Development.Log("Disconnected from MySQL");
+            database.Disconnect();
+            database = null;
+        }
+
+        Development.Log("Server Shutdown");
+        IsReady = false;
+        Development.Divider();
     }
 }
