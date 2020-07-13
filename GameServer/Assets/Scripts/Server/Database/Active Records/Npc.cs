@@ -10,7 +10,7 @@ public partial class Database
     [Table("npcs")]
     public class Npc : ActiveRecord
     {
-        public int id;
+        public uint id;
         public string name;
         public int health;
         public string prefab;

@@ -9,7 +9,7 @@ public partial class Database
     [Table("items")]
     public class Item : ActiveRecord
     {
-        public int id;
+        public uint id;
         public string name;
 
         public Item() : base() { }

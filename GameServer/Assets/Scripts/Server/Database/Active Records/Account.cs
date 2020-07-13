@@ -9,7 +9,7 @@ public partial class Database
     [Table("accounts")]
     public class Account : ActiveRecord
     {
-        public int id;
+        public uint id;
 
         public string username;
 
