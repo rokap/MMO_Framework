@@ -33,7 +33,7 @@ public class ActiveRecord
     }
 
     // Create
-    protected int Create()
+    protected uint Create()
     {
 
         FieldInfo[] properties = GetType().GetFields();
@@ -44,7 +44,7 @@ public class ActiveRecord
 
         string sql = "INSERT INTO " + GetTableName() + " ( " + GetFields() + " ) values ( " + GetValues() + " ); SELECT LAST_INSERT_ID();";
 
-        return Convert.ToInt32(Server.database.Query(sql)[0]["id"]);
+        return Convert.ToUInt32(Server.database.Query(sql)[0]["id"]);
 
     }
 

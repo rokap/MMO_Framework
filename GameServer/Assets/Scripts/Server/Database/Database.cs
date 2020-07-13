@@ -41,7 +41,7 @@ public partial class Database
             Debug.Log(sql);
             cmd = new MySqlCommand(sql, con);
 
-            int id = Convert.ToInt32(cmd.ExecuteScalar());
+            uint id = Convert.ToUInt32(cmd.ExecuteScalar());
             cmd.Dispose();
             DataTable data = new DataTable();
             data.Columns.Add("id"); ;
@@ -71,7 +71,7 @@ public partial class Database
         return null;
     }
 
-    public void Connect()
+    public bool Connect()
     {
         connectionString = "Server=" + host + ";Database=" + database + ";User=" + user + ";Password=" + password + ";Pooling=";
 
@@ -87,14 +87,13 @@ public partial class Database
         {
             con = new MySqlConnection(connectionString);
             con.Open();
-            // Debug.Log("Connecting to Mysql" + ((con.State == ConnectionState.Open)?"....Connected":"....Error"));
-
-
         }
         catch (Exception e)
         {
             Debug.Log(e);
+            return false;
         }
+        return true;
     }
 
     public void Disconnect()
@@ -104,7 +103,6 @@ public partial class Database
             if (con.State.ToString() != "Closed")
             {
                 con.Close();
-                Debug.Log("Mysql connection closed");
             }
             con.Dispose();
         }
