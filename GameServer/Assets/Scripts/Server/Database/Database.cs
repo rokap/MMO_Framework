@@ -12,7 +12,7 @@ using MySql.Data.MySqlClient;
 
 
 [Serializable]
-public class Database
+public partial class Database
 {
     public string host, database, user, password;
     public bool pooling = true;
