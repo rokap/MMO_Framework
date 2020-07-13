@@ -188,9 +188,9 @@ public class NetworkManager : MonoBehaviour
     // Insert logic for processing found files here.
     public static void ProcessFile(string path)
     {
-        if(!path.Contains(".meta"))
+        if (!path.Contains(".meta"))
         {
-            GUILayout.Label(" - " + path.Replace(".cs","") );
+            GUILayout.Label(" - " + path.Replace(".cs", ""));
         }
     }
 }
