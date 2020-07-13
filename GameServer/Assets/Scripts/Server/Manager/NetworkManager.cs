@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,9 +37,6 @@ public class NetworkManager : MonoBehaviour
         if (GUILayout.Button("Test"))
         {
 
-            // Update Record
-            Item item = new Item("Test");
-            Debug.Log(item.id);
         }
     }
 
