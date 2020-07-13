@@ -50,21 +50,31 @@ public partial class Server
             string password = _packet.ReadString();
             string email = _packet.ReadString();
 
-            Debug.Log(username);
-            Debug.Log(password);
-            Debug.Log(email);
+            Database.Account account = ActiveRecord.Load<Database.Account>(("username", username));
 
             // Check DB for existing user
-            if (Server.database.CreateAccount(username, password, email))
-            {
-                // Account Created Successfully
-                Server.Send.SendToCharacterSelection(_fromClient);
-            }
-            else
+            if (account != null)
             {
                 // Account Exists / Inform Client
                 Server.Send.RegistrationAccountExists(_fromClient);
             }
+            else
+            {
+                // Account Created Successfully
+                // Added to Connected Client
+                Server.clients[_fromClient].account = new Database.Account(username, password, email);
+
+                // Send Client to Character Selection
+                Server.Send.SendToCharacterSelection(_fromClient);
+            }
+        }
+
+        public static void Login(int _fromClient, Packet _packet)
+        {
+            string username = _packet.ReadString();
+            string password = _packet.ReadString();
+
+            Database.Account account = ActiveRecord.Load<Database.Account>(("username", username), ("password", password));
         }
     }
 }
