@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 public class Entity : MonoBehaviour
 {
-    public int id;
+    public uint id;
     public string description;
-
 
     private void Start()
     {

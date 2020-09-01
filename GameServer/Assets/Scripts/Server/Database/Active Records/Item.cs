@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+namespace Database
+{
     [Table("items")]
     public class Item : ActiveRecord
     {
@@ -18,3 +20,4 @@ using UnityEngine;
             this.id = this.Create();
         }
     }
+}

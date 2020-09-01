@@ -14,7 +14,7 @@ public partial class Server
     public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
     public static Dictionary<int, Packet.Receiver> packetReceivers;
 
-    public static Database database = null;
+    public static Database.Connection database = null;
 
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
@@ -59,7 +59,7 @@ public partial class Server
         string pass = MyIni.Read("Password", section);
         string db = MyIni.Read("Database", section);
 
-        database = new Database(host, db, user, pass, true);
+        database = new Database.Connection(host, db, user, pass, true);
         Development.Log("Starting Server");
 
         MaxPlayers = _maxPlayers;

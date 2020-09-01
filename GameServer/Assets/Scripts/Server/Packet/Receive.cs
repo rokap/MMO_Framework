@@ -50,7 +50,7 @@ public partial class Server
             string password = _packet.ReadString();
             string email = _packet.ReadString();
 
-            Account account = ActiveRecord.Load<Account>(("username", username));
+            Database.Account account = Database.ActiveRecord.Load<Database.Account>(("username", username));
 
             // Check DB for existing user
             if (account != null)
@@ -62,7 +62,7 @@ public partial class Server
             {
                 // Account Created Successfully
                 // Added to Connected Client
-                Server.clients[_fromClient].account = new Account(username, password, email);
+                Server.clients[_fromClient].account = new Database.Account(username, password, email);
 
                 // Send Client to Character Selection
                 Server.Send.SendToCharacterSelection(_fromClient);
@@ -74,7 +74,7 @@ public partial class Server
             string username = _packet.ReadString();
             string password = _packet.ReadString();
 
-            Account account = ActiveRecord.Load<Account>(("username", username), ("password", password));
+            Database.Account account = Database.ActiveRecord.Load<Database.Account>(("username", username), ("password", password));
         }
     }
 }

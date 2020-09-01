@@ -6,7 +6,7 @@ using UnityEngine;
 public partial class Server
 {
     public class Send
-    {       
+    {
 
         private static void SendTCPData(int _toClient, Packet _packet)
         {
@@ -14,7 +14,7 @@ public partial class Server
             Debug.Log("Sending [" + _packet.packetType + "] to Client[" + _toClient + "]");
             Server.clients[_toClient].tcp.SendData(_packet);
         }
-     
+
         private static void SendUDPData(int _toClient, Packet _packet)
         {
             _packet.WriteLength();
@@ -265,6 +265,7 @@ public partial class Server
                 _packet.Write(_entity.transform.position);
 
                 SendTCPDataToAll(_packet);
+                Debug.Log("Sending " + _entity.name + " To All Clients");
             }
         }
 
