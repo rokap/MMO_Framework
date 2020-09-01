@@ -18,6 +18,8 @@ public class NetworkManager : MonoBehaviour
 
     private void Awake()
     {
+
+       
         if (instance == null)
         {
             instance = this;
