@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public partial class Database
-{
     [Table("npcs")]
     public class Npc : ActiveRecord
     {
@@ -27,4 +25,3 @@ public partial class Database
             this.id = this.Create();
         }
     }
-}

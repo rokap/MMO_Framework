@@ -35,6 +35,8 @@ public class NetworkManager : MonoBehaviour
         Application.targetFrameRate = 30;
         myGUIStyle.normal.textColor = Color.black;
         myGUIStyle.normal.background = MakeTex(600, 1, new Color(0f, 0f, 0f, 0.5f));
+        
+        Server.Start(maxPlayers, port);
 
     }
     private Texture2D MakeTex(int width, int height, Color col)
@@ -55,13 +57,62 @@ public class NetworkManager : MonoBehaviour
     {
 
         GUILayout.BeginHorizontal();
-        GUILayout.BeginArea(new Rect(15, 15, 200, 200), myGUIStyle);
+        GUILayout.BeginArea(new Rect(15, 15, 200, 200), myGUIStyle);    
+
         if (Server.IsReady)
         {
             if (GUILayout.Button("Stop Server"))
             {
                 Server.Stop();
             }
+
+            GUILayout.Label("Server: Ready");
+
+            if (Server.database != null)
+            {
+                GUILayout.Label("Database: Ready");
+            }
+            else
+            {
+                GUILayout.Label("Database: Not Ready");
+            }
+
+            if (Server.ClientsReady)
+            {
+                GUILayout.Label("Client Connections : Ready");
+            }
+            else
+            {
+                GUILayout.Label("Client Connections : Not Ready");
+            }
+
+            if (Server.PacketsReady)
+            {
+                GUILayout.Label("Packets : Ready");
+            }
+            else
+            {
+                GUILayout.Label("Packets : Not Ready");
+            }
+
+            if (Server.TcpReady)
+            {
+                GUILayout.Label("TCP Socket : Ready");
+            }
+            else
+            {
+                GUILayout.Label("TCP Socket : Not Ready");
+            }
+
+            if (Server.UdpReady)
+            {
+                GUILayout.Label("UDP Socket : Ready");
+            }
+            else
+            {
+                GUILayout.Label("UDP Socket : Not Ready");
+            }
+
         }
         else
         {
@@ -69,41 +120,15 @@ public class NetworkManager : MonoBehaviour
             {
                 Server.Start(maxPlayers, port);
             }
-        }
-        if (Server.IsReady)
-            GUILayout.Label("Server: Ready");
-        else
+
             GUILayout.Label("Server: Not Ready");
-
-        if (Server.database != null)
-            GUILayout.Label("Database: Ready");
-        else
-            GUILayout.Label("Database: Not Ready");
-
-        if (Server.ClientsReady)
-            GUILayout.Label("Client Connections : Ready");
-        else
-            GUILayout.Label("Client Connections : Not Ready");
-
-        if (Server.PacketsReady)
-            GUILayout.Label("Packets : Ready");
-        else
-            GUILayout.Label("Packets : Not Ready");
-
-        if (Server.TcpReady)
-            GUILayout.Label("TCP Socket : Ready");
-        else
-            GUILayout.Label("TCP Socket : Not Ready");
-
-        if (Server.UdpReady)
-            GUILayout.Label("UDP Socket : Ready");
-        else
-            GUILayout.Label("UDP Socket : Not Ready");
+        }       
 
         GUILayout.EndArea();
         GUILayout.BeginArea(new Rect(230, 15, 200, 400), myGUIStyle);
 
         GUILayout.Label("Loaded Listener");
+
         if (Server.PacketsReady)
         {
             foreach (KeyValuePair<int, Packet.Receiver> receiver in Server.packetReceivers)

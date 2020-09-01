@@ -44,11 +44,11 @@ public partial class Server
         get { return (database != null) ? true : false; }
     }
 
-    public static bool IsReady { get; private set; }
+    public static bool IsReady
+    {
+        get; private set;
+    }
 
-    /// <summary>Starts the server.</summary>
-    /// <param name="_maxPlayers">The maximum players that can be connected simultaneously.</param>
-    /// <param name="_port">The port to start the server on.</param>
     public static void Start(int _maxPlayers, int _port)
     {
         database = new Database("127.0.0.1", "mmo_server", "mmoServer", "hobbes03", true);
@@ -63,9 +63,6 @@ public partial class Server
         Development.Divider();
     }
 
-
-
-    /// <summary>Handles new TCP connections.</summary>
     private static void TCPConnectCallback(IAsyncResult _result)
     {
         TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
@@ -84,7 +81,6 @@ public partial class Server
         Debug.Log($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
     }
 
-    /// <summary>Receives incoming UDP data.</summary>
     private static void UDPReceiveCallback(IAsyncResult _result)
     {
         // If we lost our connection
@@ -132,9 +128,6 @@ public partial class Server
         }
     }
 
-    /// <summary>Sends a packet to the specified endpoint via UDP.</summary>
-    /// <param name="_clientEndPoint">The endpoint to send the packet to.</param>
-    /// <param name="_packet">The packet to send.</param>
     public static void SendUDPData(IPEndPoint _clientEndPoint, Packet _packet)
     {
         try
@@ -150,7 +143,6 @@ public partial class Server
         }
     }
 
-    /// <summary>Initializes all necessary server data.</summary>
     private static void InitializeServerData()
     {
 
@@ -192,6 +184,8 @@ public partial class Server
         Development.Log($"Server Started ( {Port} )");
         IsReady = true;
 
+        // Delegate to a new Game()
+        Game.Load();
     }
 
     private static void InitPacketReceiver(Client.Packets _clientPacket, Packet.Receiver _serverPacketHandler)
@@ -204,7 +198,7 @@ public partial class Server
 
         //Debug.Log(" - ( " + (int)_clientPacket + " ) " + _clientPacket + " Receiver Initialized... ");
         packetReceivers.Add((int)_clientPacket, _serverPacketHandler);
-        
+
     }
 
     public static void Stop()
@@ -242,6 +236,7 @@ public partial class Server
 
         if (DatabaseReady)
         {
+            Game.Save();
             Development.Log("Disconnected from MySQL");
             database.Disconnect();
             database = null;

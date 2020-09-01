@@ -14,7 +14,7 @@ public partial class Client
     public Player player;
     public TCP tcp;
     public UDP udp;
-    public Database.Account account;
+    public Account account;
 
     public Client(int _clientId)
     {

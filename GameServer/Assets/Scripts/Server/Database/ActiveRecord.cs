@@ -96,7 +96,7 @@ public class ActiveRecord
     }
 
     // Load By Id
-    public static T Load<T>(int id) where T : new()
+    public static T Load<T>(uint id) where T : new()
     {
         Type t = typeof(T);
         string table = t.GetCustomAttribute<Table>().name;
