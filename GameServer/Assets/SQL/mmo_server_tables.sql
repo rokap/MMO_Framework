@@ -19,9 +19,18 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `email` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
+-- Dumping data for table mmo_server.accounts: ~5 rows (approximately)
+/*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
+INSERT INTO `accounts` (`id`, `username`, `password`, `email`) VALUES
+	(20, 'Jim', '123', 'dave@rokap.com'),
+	(21, 'Dave', '123', 'dave@rokap.com'),
+	(22, 'Ralph', '123', 'dave@rokap.com'),
+	(23, 'Billy', '123', 'dave@rokap.com'),
+	(44, 'Pee Pee Pants', 'Password', 'dave@somethingelse.com');
+/*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
+
 -- Dumping structure for table mmo_server.characters
 CREATE TABLE IF NOT EXISTS `characters` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -31,9 +40,30 @@ CREATE TABLE IF NOT EXISTS `characters` (
   PRIMARY KEY (`id`),
   KEY `FK_characters_accounts` (`account_id`),
   CONSTRAINT `FK_characters_accounts` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
+-- Dumping data for table mmo_server.characters: ~2 rows (approximately)
+/*!40000 ALTER TABLE `characters` DISABLE KEYS */;
+INSERT INTO `characters` (`id`, `account_id`, `name`, `level`) VALUES
+	(3, 44, 'Something Else', 500),
+	(4, 23, 'Flappy', 4);
+/*!40000 ALTER TABLE `characters` ENABLE KEYS */;
+
+-- Dumping structure for table mmo_server.items
+CREATE TABLE IF NOT EXISTS `items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT 'NoName',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table mmo_server.items: ~3 rows (approximately)
+/*!40000 ALTER TABLE `items` DISABLE KEYS */;
+INSERT INTO `items` (`id`, `name`) VALUES
+	(2, 'Jimmies Broad Sword'),
+	(3, 'Dagger'),
+	(5, 'Club');
+/*!40000 ALTER TABLE `items` ENABLE KEYS */;
+
 -- Dumping structure for table mmo_server.npcs
 CREATE TABLE IF NOT EXISTS `npcs` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -42,9 +72,24 @@ CREATE TABLE IF NOT EXISTS `npcs` (
   `prefab` varchar(50) NOT NULL DEFAULT 'Default',
   `merchant` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
+-- Dumping data for table mmo_server.npcs: ~11 rows (approximately)
+/*!40000 ALTER TABLE `npcs` DISABLE KEYS */;
+INSERT INTO `npcs` (`id`, `name`, `health`, `prefab`, `merchant`) VALUES
+	(1, 'Skeleton', 100, 'Default', 0),
+	(2, 'Zombie', 100, 'Default', 0),
+	(3, 'Gremlin', 100, 'Default', 0),
+	(5, 'Tusker', 100, 'Default', 0),
+	(6, 'Troll', 100, 'Default', 0),
+	(7, 'Rat', 100, 'Default', 0),
+	(8, 'Snake', 100, 'Default', 0),
+	(9, 'Thug', 100, 'Default', 0),
+	(10, 'Bee', 100, 'Default', 0),
+	(11, 'Spider', 100, 'Default', 0),
+	(12, 'Guard', 100, 'Default', 0);
+/*!40000 ALTER TABLE `npcs` ENABLE KEYS */;
+
 -- Dumping structure for table mmo_server.npc_spawn
 CREATE TABLE IF NOT EXISTS `npc_spawn` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -62,9 +107,14 @@ CREATE TABLE IF NOT EXISTS `npc_spawn` (
   CONSTRAINT `FK_npc_entities_npc` FOREIGN KEY (`npc_id`) REFERENCES `npcs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_npc_entities_npc_spawn_group` FOREIGN KEY (`npc_spawn_group_id`) REFERENCES `npc_spawn_groups` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `FK_npc_spawn_npc_spawn_points` FOREIGN KEY (`npc_spawn_point_id`) REFERENCES `npc_spawn_points` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
+-- Dumping data for table mmo_server.npc_spawn: ~1 rows (approximately)
+/*!40000 ALTER TABLE `npc_spawn` DISABLE KEYS */;
+INSERT INTO `npc_spawn` (`id`, `npc_id`, `npc_spawn_group_id`, `npc_spawn_point_id`, `position_x`, `position_y`, `position_z`, `heading`) VALUES
+	(2, 1, 1, 1, 0, 0, 0, 0);
+/*!40000 ALTER TABLE `npc_spawn` ENABLE KEYS */;
+
 -- Dumping structure for table mmo_server.npc_spawn_groups
 CREATE TABLE IF NOT EXISTS `npc_spawn_groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -73,7 +123,13 @@ CREATE TABLE IF NOT EXISTS `npc_spawn_groups` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
--- Data exporting was unselected.
+-- Dumping data for table mmo_server.npc_spawn_groups: ~0 rows (approximately)
+/*!40000 ALTER TABLE `npc_spawn_groups` DISABLE KEYS */;
+INSERT INTO `npc_spawn_groups` (`id`, `name`, `npc_limit`) VALUES
+	(1, 'Ravenshire Underworld', 5),
+	(2, 'Ravenshire Town Guards', 0);
+/*!40000 ALTER TABLE `npc_spawn_groups` ENABLE KEYS */;
+
 -- Dumping structure for table mmo_server.npc_spawn_groups_entries
 CREATE TABLE IF NOT EXISTS `npc_spawn_groups_entries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -87,7 +143,14 @@ CREATE TABLE IF NOT EXISTS `npc_spawn_groups_entries` (
   CONSTRAINT `FK_npc_spawn_groups_entries_npc_spawn_groups` FOREIGN KEY (`npc_spawn_group_id`) REFERENCES `npc_spawn_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
--- Data exporting was unselected.
+-- Dumping data for table mmo_server.npc_spawn_groups_entries: ~2 rows (approximately)
+/*!40000 ALTER TABLE `npc_spawn_groups_entries` DISABLE KEYS */;
+INSERT INTO `npc_spawn_groups_entries` (`id`, `npc_spawn_group_id`, `npc_id`, `chance`) VALUES
+	(4, 1, 1, 100.00),
+	(5, 1, 1, 5.00),
+	(6, 2, 12, 100.00);
+/*!40000 ALTER TABLE `npc_spawn_groups_entries` ENABLE KEYS */;
+
 -- Dumping structure for table mmo_server.npc_spawn_points
 CREATE TABLE IF NOT EXISTS `npc_spawn_points` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -101,7 +164,15 @@ CREATE TABLE IF NOT EXISTS `npc_spawn_points` (
   CONSTRAINT `FK_npc_spawn_points_npc_spawn_group` FOREIGN KEY (`npc_spawn_group_id`) REFERENCES `npc_spawn_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
--- Data exporting was unselected.
+-- Dumping data for table mmo_server.npc_spawn_points: ~4 rows (approximately)
+/*!40000 ALTER TABLE `npc_spawn_points` DISABLE KEYS */;
+INSERT INTO `npc_spawn_points` (`id`, `npc_spawn_group_id`, `position_x`, `position_y`, `position_z`, `heading`) VALUES
+	(1, 1, 0, 0, 0, 0),
+	(2, 2, 1, 0, 1, 0),
+	(3, 2, 0, 0, 1, 0),
+	(4, 2, -1, 0, 1, 0);
+/*!40000 ALTER TABLE `npc_spawn_points` ENABLE KEYS */;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
