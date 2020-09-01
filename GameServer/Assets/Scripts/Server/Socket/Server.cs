@@ -51,7 +51,15 @@ public partial class Server
 
     public static void Start(int _maxPlayers, int _port)
     {
-        database = new Database("127.0.0.1", "mmo_server", "mmoServer", "hobbes03", true);
+
+        Util.IniFile MyIni = new Util.IniFile("Settings.ini");
+        string section = "MySQL";
+        string host = MyIni.Read("Host", section);
+        string user = MyIni.Read("Username", section);
+        string pass = MyIni.Read("Password", section);
+        string db = MyIni.Read("Database", section);
+
+        database = new Database(host, db, user, pass, true);
         Development.Log("Starting Server");
 
         MaxPlayers = _maxPlayers;
