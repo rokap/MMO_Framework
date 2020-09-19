@@ -52,14 +52,15 @@ namespace Database
         }
 
         // Update 
-        public void Save()
+        public uint Save()
         {
             FieldInfo field = GetType().GetField("id");
-            int id = Convert.ToInt32(field.GetValue(this));
+            uint id = (uint) field.GetValue(this);
 
             if(id == 0)
             {
-                Create();
+              id = Create();
+                
             }
             else
             {
@@ -67,6 +68,7 @@ namespace Database
                 string sql = string.Format("UPDATE {0} SET " + GetUpdateFieldValue() + " WHERE id = {1}", table, id);
                 Server.database.Query(sql);
             }
+            return id;
         }
 
         // Load All

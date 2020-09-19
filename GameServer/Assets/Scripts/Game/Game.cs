@@ -37,7 +37,7 @@ public static class Game
         }
 
         // Load Scenery In World;
-        foreach (Scenery scenery in ActiveRecord.Load<Scenery>())
+        foreach (ScenerySpawnPoint scenery in ActiveRecord.Load<ScenerySpawnPoint>())
         {
             scenery.Instantiate();
         }
@@ -55,7 +55,10 @@ public static class Game
         // Save Scenery In World;
         foreach (Scenery scenery in GameObject.FindObjectsOfType<Scenery>())
         {
-            scenery.Save();
+            uint id = scenery.Save();
+            ScenerySpawnPoint scenerySpawnPoint = scenery.GetComponent<ScenerySpawnPoint>();
+            scenerySpawnPoint.scenery_id = id;
+            scenerySpawnPoint.Save();
         }
     }
 

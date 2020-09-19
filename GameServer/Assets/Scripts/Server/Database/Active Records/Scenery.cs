@@ -9,76 +9,67 @@ namespace Database
         public uint id;
         [HideInInspector]
         public new string name;
-        public string description;
+        public string description;        
         public string prefab;
 
-        public float position_x;
-        public float position_y;
-        public float position_z;
-
-        public float rotation_x;
-        public float rotation_y;
-        public float rotation_z;
-
-
-        public Vector3 position
+        public float scale_x = 1f;
+        public float scale_y = 1f;
+        public float scale_z = 1f;
+        public Vector3 Size
         {
-            get { return new Vector3(position_x, position_y, position_z); }
+            get { return new Vector3(scale_x, scale_y, scale_z); }
             set
             {
-                position_x = value.x;
-                position_y = value.y;
-                position_z = value.z;
+                scale_x = value.x;
+                scale_y = value.y;
+                scale_z = value.z;
             }
         }
 
-        public Quaternion rotation
-        {
-            get { return Quaternion.Euler(new Vector3(rotation_x, rotation_y, rotation_z)); }
-            set
-            {
-                rotation_x = value.eulerAngles.x;
-                rotation_y = value.eulerAngles.y;
-                rotation_z = value.eulerAngles.z;
-            }
-        }
+        public Scenery() : base() {}
 
-        public Scenery() : base() { }
-
-        public Scenery(string name, string description, Vector3 position, Quaternion rotation, string prefab)
+        public Scenery(string name, string description, string prefab, Vector3 scale)
         {
             this.name = name;
             this.description = description;
-            this.position = position;
-            this.rotation = rotation;
             this.prefab = prefab;
+            
+            this.scale_x = scale.x;
+            this.scale_y = scale.y;
+            this.scale_z = scale.z;
+
             this.id = this.Create();
         }
 
-        public Scenery Instantiate()
+        public void Init(Scenery scenery)
         {
-            Scenery scenery = GameObject.Instantiate<Scenery>(Resources.Load<Scenery>("Scenery/" + prefab), position, rotation, GameObject.Find("Scenery").transform);
+            // Update Gameobject Fields
+            System.Reflection.FieldInfo[] fields = this.GetType().GetFields();
+            foreach (System.Reflection.FieldInfo field in fields)
+            {
+                field.SetValue(scenery, field.GetValue(this));
+            }
 
-            scenery.id = id;
-            scenery.name = scenery.gameObject.name = name;
-            scenery.description = description;
-            scenery.prefab = prefab;
-            scenery.position = position;
-            scenery.rotation = rotation;
+            Debug.Log(scenery.Size);
 
-            return scenery;
+            // Set Scenery Scale
+            scenery.transform.localScale = scenery.Size;
+
         }
 
         private void Update()
-        {
-            if (position != transform.position)
-                position = transform.position;
-
-            if (rotation != transform.rotation)
-                rotation = transform.rotation;
-
+        {            
             if (gameObject.name != name)
                 name = gameObject.name;
+
+            if (transform.localScale.x != scale_x)
+                scale_x = transform.localScale.x;
+
+            if (transform.localScale.y != scale_y)
+                scale_y = transform.localScale.y;
+
+            if (transform.localScale.z != scale_z)
+                scale_z = transform.localScale.z;
         }
     }
 }
